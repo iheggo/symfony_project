@@ -62,22 +62,28 @@ class DefaultController extends Controller
     public function signupAction(Request $request)		// signup controller
     {
 		$em = $this->getDoctrine()->getManager();
-        $repository = $em->getRepository('TahrirBlogBundle:Post');	
+        $repository = $em->getRepository('TahrirBlogBundle:User');	
         
 		if ($request->getMethod() == 'POST') {
 			$username = $request->get('username');
             $password = sha1($request->get('password'));
             $email = $request->get('email');
 			
-			$user = new User();
-			$user->setUsername($username);
-			$user->setPassword($password);
-			$user->setEmail($email);
-			$em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
-			
-			return $this->render('TahrirBlogBundle:Default:signup.html.twig',array('message'=> 'Successfully Signed-up'));
+			$same_username = $repository->findOneBy(array('username' => $username));
+			$same_email = $repository->findOneBy(array('email' => $email));
+			if($same_username || $same_email)	// check if submitted mail or user is already registered
+				$message = "Unsuccessful Operation";
+			else{
+				$user = new User();
+				$user->setUsername($username);
+				$user->setPassword($password);
+				$user->setEmail($email);
+				$em = $this->getDoctrine()->getManager();
+				$em->persist($user);
+				$em->flush();
+				$message = 'Successfully Signed-up';
+			}
+			return $this->render('TahrirBlogBundle:Default:signup.html.twig',array('message'=> $message));
 		}
 		
 		return $this->render('TahrirBlogBundle:Default:signup.html.twig');
