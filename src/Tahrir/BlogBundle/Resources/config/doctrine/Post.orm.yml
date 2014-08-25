@@ -1,0 +1,30 @@
+Tahrir\BlogBundle\Entity\Post:
+    type: entity
+    table: null
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        title:
+            type: string
+            length: 255
+        content:
+            type: string
+            length: '5000'
+        tags:
+            type: string
+            length: 255
+        imageUrl:
+            type: string
+            length: 255
+            column: image_url
+        creationDate:
+            type: datetime
+            column: creation_date
+        postedBy:
+            type: integer
+            column: posted_by
+    lifecycleCallbacks: {  }

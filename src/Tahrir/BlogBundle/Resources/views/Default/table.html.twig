@@ -1,0 +1,65 @@
+<div class="container" style="margin-top: 10px">
+
+    <div id="" class="form-inline" role="grid">
+        <div class="row">
+            <div class="span8">
+            </div>
+            <div class="span4">
+                <div class="dataTables_filter" id="example_filter">
+                    <label>Search: <input type="text" class="search-query"></label>
+                </div>
+            </div>
+        </div>
+    </div>
+    <table class="table table-striped ">
+        <thead>
+            <tr>
+                <th>NAME</th>               
+                <th>CONTINENT</th>
+                <th>REGION</th>               
+                <th>AREA</th>
+                <th>Indp Yr</th>   
+                <th>POP</th>
+                <th>LIFE EXP</th>
+                <th>GNP</th>
+                <th>GNP OLD</th>
+                <th>LOCAL NAME</th>
+                <th>GOVT</th>
+                <th>HOS</th>
+                <th>CAPITAL</th>
+                <th>CODE</th>
+            </tr>
+        </thead>     
+        <tbody>
+            {%for country in countries%}
+            <tr >
+                {%if country is iterable%}
+                     {%for detail in country%}
+                    <td>{{detail}}</td>
+                     {%endfor%}
+                {%endif%}
+            </tr>
+             {%endfor%}
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="span4">
+            {%if total_pages > 0%}
+            <div class="pagination">
+                <ul>
+                    {%for i in 1..total_pages%}
+                        {%if loop.first %}
+                    <li class="prev {%if current_page==1%} disabled{%endif%}"><a href="{{path('tahrir_blog_homepage',{'page':current_page-1})}}">← Previous</a></li>
+                        {%endif%}
+                    <li {%if current_page==loop.index%} class="active"{%endif%}><a href="{{path('tahrir_blog_homepage',{'page':loop.index})}}">{{loop.index}}</a></li> 
+                   
+                    {%if loop.last %}
+                    <li class="next{%if current_page==total_pages%} disabled {%endif%}"><a href="{{path('tahrir_blog_homepage',{'page':current_page+1})}}">Next → </a></li>
+                      {%endif%}
+                    {%endfor%}
+                </ul>
+            </div>
+             {%endif%}
+        </div>
+    </div>
+</div>

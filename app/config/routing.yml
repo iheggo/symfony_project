@@ -1,0 +1,4 @@
+tahrir_blog:
+    resource: "@TahrirBlogBundle/Resources/config/routing.yml"
+    prefix:   /
+

@@ -1,0 +1,31 @@
+tahrir_blog_homepage:
+    path:     /home/
+    defaults: { _controller: TahrirBlogBundle:Default:index }
+
+tahrir_blog_signup:
+    path:     /signup/
+    defaults: { _controller: TahrirBlogBundle:Default:signup }
+
+tahrir_blog_logout:
+    path:     /logout/
+    defaults: { _controller: TahrirBlogBundle:Default:logout }
+
+tahrir_blog_newpost:
+    path:     /newpost/
+    defaults: { _controller: TahrirBlogBundle:Default:createPost }
+
+tahrir_blog_myposts:
+    path:     /myposts/
+    defaults: { _controller: TahrirBlogBundle:Default:myPosts }
+
+tahrir_blog_viewpost:
+    path:     /viewpost/{id}
+    defaults: { _controller: TahrirBlogBundle:Default:viewPost }
+
+tahrir_blog_deletepost:
+    path:     /deletepost/
+    defaults: { _controller: TahrirBlogBundle:Default:deletePost }	
+
+tahrir_blog_editpost:
+    path:     /editpost/{id}
+    defaults: { _controller: TahrirBlogBundle:Default:editPost }
