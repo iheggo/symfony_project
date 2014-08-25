@@ -6,7 +6,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints\DateTime;
+use Tahrir\BlogBundle\Models\Document;
 use Tahrir\BlogBundle\Entity\User;
 use Tahrir\BlogBundle\Entity\Post;
 use Tahrir\BlogBundle\Modals\Login;
@@ -93,26 +95,37 @@ class DefaultController extends Controller
 				$content = $request->get('content');
 				$tags = $request->get('tags');
 				$date = date('Y-m-d H:i:s');;
-			
+				$image = $request->files->get('image');
+				if (($image instanceof UploadedFile) && ($image->getError() == '0')) {
+					//Start Uploading File
+					$document = new Document();
+					$document->setFile($image);
+					//$document->setUploadDirectory('uploads');
+					$document->setSubDirectory('uploads');
+					$document->processFile();
+					$uploadedURL = $document->getUploadDirectory() . DIRECTORY_SEPARATOR . $document->getSubDirectory() . DIRECTORY_SEPARATOR . $image->getBasename();
+				} else {
+					return $this->indexAction(new Request);
+				}	
 				
 				$post = new Post();
 				$post->setTitle($title);
 				$post->setContent($content);
+				$post->setImageUrl($uploadedURL);
 				$post->setTags($tags);
 				$post->setPostedBy($session->get('id'));
-				$post->setImageUrl('');
 				$post->setCreationDate(new \DateTime('now'));
 				$em = $this->getDoctrine()->getManager();
 				$em->persist($post);
 				$em->flush();
 				
-			return $this->render('TahrirBlogBundle:Default:newpost.html.twig',array('message' => 'Successfully Created'));	
+				return $this->render('TahrirBlogBundle:Default:newpost.html.twig',array('message' => 'Successfully Created'));	
 			}
 			
-		return $this->render('TahrirBlogBundle:Default:newpost.html.twig');	
+			return $this->render('TahrirBlogBundle:Default:newpost.html.twig');	
 		}
 		else{ 
-			return $this->render('TahrirBlogBundle:Default:login.html.twig');
+			return $this->indexAction(new Request);
 		}
     }
 	
@@ -151,7 +164,7 @@ class DefaultController extends Controller
         $repository = $em->getRepository('TahrirBlogBundle:Post');		
 		$post = $repository->findOneBy(array('id' => $id));
 		return $this->render('TahrirBlogBundle:Default:post.html.twig',array('id'=> $id, 'title' => $post->getTitle() ,'content' => $post->getContent(),
-		'tags' => $post->getTags(), 'creationDate' => $post->getCreationDate() ));
+		'tags' => $post->getTags(),'imageURL' => $post->getImageUrl() ,  'creationDate' => $post->getCreationDate() ));
 		
     }	
 
@@ -202,15 +215,26 @@ class DefaultController extends Controller
 					$post->setTitle($request->get('title'));
 					$post->setContent($request->get('content'));
 					$post->setTags($request->get('tags'));
-					$em->flush();
-				
+					$image = $request->files->get('image');
+					
+					if ($image && ($image instanceof UploadedFile) && ($image->getError() == '0')) {
+						//Start Uploading File
+						$document = new Document();
+						$document->setFile($image);
+						$document->setSubDirectory('uploads');
+						$document->processFile();
+						$uploadedURL = $document->getUploadDirectory() . DIRECTORY_SEPARATOR . $document->getSubDirectory() . DIRECTORY_SEPARATOR . $image->getBasename();
+						$post->setImageUrl($uploadedURL);
+					} 
+					
+					$em->flush();		// update database schema
 					return $this->render('TahrirBlogBundle:Default:editpost.html.twig',array('message'=> 'Successfully Saved', 'id'=> $id, 'title' => $post->getTitle() ,'content' => $post->getContent(),
 					'tags' => $post->getTags(), 'creationDate' => $post->getCreationDate() ));
 				}
 				
 				
 				return $this->render('TahrirBlogBundle:Default:editpost.html.twig',array('id'=> $id, 'title' => $post->getTitle() ,'content' => $post->getContent(),
-				'tags' => $post->getTags(), 'creationDate' => $post->getCreationDate() ));
+				'tags' => $post->getTags(),'tags' => $post->getTags(), 'creationDate' => $post->getCreationDate() ));
 			}
 	
 		}

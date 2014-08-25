@@ -42,8 +42,15 @@
                 <h3><a href="{{path('tahrir_blog_viewpost',{ 'id': post.id  } )}}">{{ post.title }}</a></h3>
 				<h6 style="color:gray">{{ post.creationDate|date('Y-m-d H:i:s') }}</h6>
 				<br>
-				<p>{{ post.content }}</p>
-				<h6 style="color:gray">{{ post.tags }}</h6>
+				<div  style="min-height:130px" width="150">
+				<p>
+				{% if post.imageURL is defined%}
+					<img src= {{ asset(post.imageURL) }} class="pull-left" alt={{ post.title }} style="margin-right:10px; width:120px; height:120px ">
+				{%endif%}
+				{{ post.content }}
+				</p>
+				</div>
+				<h6 style="color:gray"><i>tags: {{ post.tags }}</i></h6>
 				<hr>
             {% endfor %}
 

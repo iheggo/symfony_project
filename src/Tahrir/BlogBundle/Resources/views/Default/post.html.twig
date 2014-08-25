@@ -27,6 +27,11 @@
 		<h2>{{ title }}</h2>
 		<h6 style="color:gray">{{ creationDate|date('Y-m-d H:i:s') }}</h6>
 		<br>
+		<center><div  height:"150" width="150">
+			<img src= {{ asset(imageURL) }} alt={{ title }}>
+		</div></center>
+		</br>
+		</br>
 		<p>{{ content }}</p>
 		<hr>
 		<h6 style="color:gray">{{ tags }}</h6>

@@ -2,7 +2,7 @@
 {%block container %}
 <div class="container" >
 
-    <form id="form" class="well" method="POST" action="{{path('tahrir_blog_editpost',{ 'id': id  })}}" data-validate="parsley">
+    <form id="form" class="well" method="POST" enctype="multipart/form-data" action="{{path('tahrir_blog_editpost',{ 'id': id  })}}" data-validate="parsley">
 		{% if message is defined%}
 		<div class="alert-info fade in">
 			<strong>{{message}}</strong>
@@ -12,10 +12,14 @@
         <label>Post Title</label>
         <input type="text" id="title" name="title" value="{{title}}" class="input-xlarge" data-trigger="change" data-required="true">
         <input type="hidden" id="id" name="id" value="{{id}}">
-       
+		</br>
+		</br> 
         <label>Content</label>
         <textarea name="content" class="input-xlarge" data-trigger="change" data-required="true">{{content}}</textarea>
-       
+	    <label>Image</label>
+        <input name="image" type="file" class="input-xlarge" data-trigger="change">
+		</br>
+		</br>       
 		<label>Tags</label>
         <input type="text" id="tags" value="{{tags}}" name="tags" class="input-xlarge" data-trigger="change" data-required="true">(sperate them by ',')
         </br>
